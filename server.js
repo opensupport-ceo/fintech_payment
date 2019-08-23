@@ -3,6 +3,7 @@ const app = express()
 var path = require('path'); 
 var mysql      = require('mysql');
 var request = require('request');
+var jwt = require('jsonwebtoken');
 
 //--------------------------------------------------
 var connection = mysql.createConnection({
@@ -42,7 +43,42 @@ app.get('/signup', function(req, res){
     res.render('signup');
 })
 
-app.get('/callback', function(req, res){
+app.post('/login', function(req, res){
+    var userEmail = req.body.userEmail;
+    var userPassword = req.body.password;
+    var sql = "SELECT * FROM user WHERE email = ?";
+    connection.query(sql, [userEmail, userPassword], function(err, results){
+        if(err){
+            throw err;
+        }
+        else {
+            if(results.length > 0){
+                var tokenKey = "asdfgqwertasdf"
+                if(results[0].password == userPassword){
+                    jwt.sign(
+                        {
+                            userName : results[0].name,
+                            userId : results[0].id
+                        },
+                        tokenKey,
+                        {
+                            expiresIn : '1d',
+                            issuer : 'fintech.admin',
+                            subject : 'user.login.info'
+                        },
+                        function(err, token){
+                            console.log('로그인 성공', token)
+                            res.json(token)
+                        }
+                    )
+                }
+            }
+        }
+    })
+
+})
+
+app.get('/authResult', function(req, res){
     var auth_code = req.query.code
     var getTokenUrl = "https://testapi.open-platform.or.kr/oauth/2.0/token";
     var option = {
