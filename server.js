@@ -112,9 +112,6 @@ app.post('/signup', function(req, res){
     var accessToken = req.body.accessToken;
     var refreshToken = req.body.refreshToken;
     var userseqnum = req.body.userseqnum;
-
-    console.log(accessToken, refreshToken, userseqnum);
-    
     var sql = "INSERT INTO `fintech`.`user`(`name`, `email`, `password`,`accessToken`,`refreshToken`,`userseqnum`) "
     + "VALUES (?,?,?,?,?,?)"    
     connection.query(sql, [name, email, password, accessToken, refreshToken, userseqnum], function(err, result){
@@ -125,6 +122,26 @@ app.post('/signup', function(req, res){
         }
         else {
             res.json(1);
+        }
+    })
+})
+
+app.get("/getUserData", function(req, res){
+    //...........
+    //...........
+    //본인 계좌 연동 정보 가져와서 출력
+    var getTokenUrl = "https://testapi.open-platform.or.kr/user/me?user_seq_no=1100035346";
+    var option = {
+        method : "GET",
+        url :getTokenUrl,
+        headers : {
+            Authorization : "Bearer a329c818-12d4-4f2a-869d-57e3b4c4e36e"
+        }
+    };
+    request(option, function(err, response, body){
+        if(err) throw err;
+        else {
+            console.log(body);
         }
     })
 })
