@@ -1,0 +1,19 @@
+
+apikey: l7xx822f78d0e6a34ee5b676eedd95732070
+
+apisecret: a77ad133e09a4ae9ab497b9d404782f3
+
+
+http://localhost:3000/callback?
+code=349636a2-15e0-416e-b29a-9a3d2eb1c895
+&scope=login+transfer
+&client_info=test+whatever+you+want
+
+authCode: 349636a2-15e0-416e-b29a-9a3d2eb1c895
+
+access token: 4c5d7def-cab3-46a0-bac7-8996af463875
+
+refresh token: 78565b1c-90af-4292-baf6-c274bddee0c0
+
+사용자일련번호: 1100035346
+
