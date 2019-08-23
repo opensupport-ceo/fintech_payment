@@ -1,0 +1,38 @@
+<% include ./hf/header.ejs %>
+<script src="scripts/instascan.min.js"></script>
+<video id="preview" style="width: 100%; height:100%; margin-top: 25vh"  ></video>
+<script type="text/javascript">
+    let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+    scanner.addListener('scan', function (content) {
+        $.ajax({
+        url: 'http://localhost:3000/withdrawQR',
+        type: 'POST',
+        headers: {
+            'x-access-token': sessionStorage.getItem('jwtToken')
+        },
+        data: {
+            qrFin : content
+        },
+        success: function (data) {
+            console.log(data);
+            if(data == 1){
+                alert('결제가 완료되었습니다.');
+            }
+            else {
+                alert('결제가 미승인되었습니다')
+            }
+        }
+    })
+    });
+    Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+        } else {
+            console.error('No cameras found.');
+        }
+    }).catch(function (e) {
+        console.error(e);
+    });
+</script>
+
+<% include ./hf/footer.ejs %>

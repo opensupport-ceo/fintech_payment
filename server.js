@@ -19,12 +19,7 @@ connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
   if (error) throw error;
   console.log('The solution is: ', results[0].solution);
 });
-
-connection.query("SELECT * FROM user", function(err, results, field){
-    console.log(results);
-})
  
-//connection.end();
 //------------------------------------------------
 
 app.set('views', __dirname + '/views');
@@ -35,12 +30,20 @@ app.use(express.urlencoded({extended : false}));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function (req, res) {
+app.get('/main', function (req, res) {
     res.render('main')
+})
+
+app.get('/login', function(req, res){
+    res.render('login');
 })
 
 app.get('/signup', function(req, res){
     res.render('signup');
+})
+
+app.get('/authTest', auth, function(req, res){
+    res.json("hello");
 })
 
 app.post('/login', function(req, res){
@@ -75,8 +78,9 @@ app.post('/login', function(req, res){
             }
         }
     })
-
 })
+
+
 
 app.get('/authResult', function(req, res){
     var auth_code = req.query.code
@@ -125,6 +129,33 @@ app.post('/signup', function(req, res){
         }
     })
 })
+
+app.get("/getUser", auth, function(req, res){
+    var userId = req.decoded.userId;
+    var sql = "SELECT * FROM user WHERE id = ?"
+    connection.query(sql,[userId], function(err, result){
+        var userseqnum = result[0].userseqnum;
+        var accessKey = result[0].accessKey;
+        var getTokenUrl = "https://testapi.open-platform.or.kr/user/me?user_seq_no="+userseqnum;
+        var option = {
+            method : "GET",
+            url :getTokenUrl,
+            headers : {
+                Authorization : "Bearer " + accessKey
+            }
+        };
+        request(option, function(err, response, body){
+            if(err) throw err;
+            else {
+                console.log(body);
+                res.json(body);
+            }
+        })
+    
+    });
+})
+
+
 
 app.get("/getUserData", function(req, res){
     //...........

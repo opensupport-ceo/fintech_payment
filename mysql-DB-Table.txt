@@ -1,0 +1,13 @@
+CREATE DATABASE `fintech` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `birthday` datetime DEFAULT NULL,
+  `user_id` varchar(255) DEFAULT NULL,
+  `user_password` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `accesstoken` varchar(255) DEFAULT NULL,
+  `refreshtoken` varchar(255) DEFAULT NULL,
+  `userseqnum` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
